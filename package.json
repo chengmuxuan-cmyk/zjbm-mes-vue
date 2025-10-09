@@ -1,9 +1,7 @@
 {
-  "name": "mes-vue",
+  "name": "zjbm-mes-vue",
   "version": "0.0.1",
   "description": "MES后台管理系统",
-  "author": "ZCC",
-  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build:prod": "vite build",
