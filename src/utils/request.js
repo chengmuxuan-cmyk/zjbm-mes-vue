@@ -6,6 +6,7 @@ import { tansParams, blobValidate } from '@/utils/ruoyi'
 import cache from '@/plugins/cache'
 import { saveAs } from 'file-saver'
 import useUserStore from '@/store/modules/user'
+import { getApiBaseUrl, getContextPath } from '@/utils/config'
 
 let downloadLoadingInstance;
 // 是否显示重新登录
@@ -17,7 +18,7 @@ axios.defaults.headers['Content-Language'] = 'zh_CN'
 // 创建axios实例
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
-  baseURL: import.meta.env.VITE_APP_BASE_API,
+  baseURL: getApiBaseUrl(),
   // 超时
   timeout: 10000
 })
@@ -82,7 +83,7 @@ service.interceptors.response.use(res => {
         ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', { confirmButtonText: '重新登录', cancelButtonText: '取消', type: 'warning' }).then(() => {
           isRelogin.show = false;
           useUserStore().logOut().then(() => {
-            location.href = import.meta.env.VITE_APP_CONTEXT_PATH + 'index';
+            location.href = getContextPath() + 'index';
           })
       }).catch(() => {
         isRelogin.show = false;

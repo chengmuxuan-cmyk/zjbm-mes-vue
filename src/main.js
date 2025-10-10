@@ -10,6 +10,7 @@ import App from './App'
 import store from './store'
 import router from './router'
 import directive from './directive' // directive
+import { getAppTitle } from '@/utils/config'
 
 // 注册指令
 import plugins from './plugins' // plugins
@@ -89,3 +90,6 @@ app.use(ElementPlus, {
 app._context.components.ElDialog.props.closeOnClickModal.default = false
 
 app.mount('#app')
+
+// 动态设置页面标题
+document.title = getAppTitle()

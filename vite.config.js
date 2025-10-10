@@ -1,4 +1,6 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv } from 'vite';
+import { OUTPUT_DIR } from './build/constant';
+import { generateAppConfig } from './build/generateConfig.js';
 import path from 'path'
 import createVitePlugins from './vite/plugins'
 
@@ -10,7 +12,18 @@ export default defineConfig(({ mode, command }) => {
     // 默认情况下，vite 会假设你的应用是被部署在一个域名的根路径上
     // 例如 https://www.ruoyi.vip/。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 https://www.ruoyi.vip/admin/，则设置 baseUrl 为 /admin/。
     base: env.VITE_APP_CONTEXT_PATH,
-    plugins: createVitePlugins(env, command === 'build'),
+    plugins: [
+      ...createVitePlugins(env, command === 'build'),
+      // 运行时配置生成插件
+      {
+        name: 'generate-app-config',
+        closeBundle() {
+          if (command === 'build') {
+            generateAppConfig(mode, OUTPUT_DIR);
+          }
+        }
+      }
+    ],
     resolve: {
       // https://cn.vitejs.dev/config/#resolve-alias
       alias: {
@@ -25,7 +38,7 @@ export default defineConfig(({ mode, command }) => {
     // 构建配置
     build: {
       // 指定打包后保存的文件夹名称
-      outDir: 'mes-vue'
+      outDir: OUTPUT_DIR,
     },
     // vite 相关配置
     server: {
