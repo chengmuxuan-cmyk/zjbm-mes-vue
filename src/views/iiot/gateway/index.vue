@@ -203,7 +203,8 @@ import {
     getDevice,
     initializeDevice, initializeDeviceModbus,
     listDevice,
-    updateDevice
+    updateDevice,
+    changeStatusDeviceWebSocket
 } from "@/api/iiot/gateway";
 import {onMounted} from "vue";
 
@@ -383,14 +384,18 @@ function handleOnOff(row) {
         if (row.status === 'online') {
             if(row.type === '1') { // modbus网关
                 return initializeDeviceModbus(deviceSn)
-            } else {
+            } else if(row.type === '0') { // MQTT网关
                 return initializeDevice(gatewayId);
+            } else { // WebSocket网关
+                return changeStatusDeviceWebSocket(gatewayId, 'online');
             }
         } else {
             if(row.type === '1') { // modbus网关
                 return disconnectDeviceModbus(deviceSn)
-            } else {
+            } else if(row.type === '0') { // MQTT网关
                 return disconnectDevice(gatewayId);
+            } else { // WebSocket网关
+                return changeStatusDeviceWebSocket(gatewayId, 'offline');
             }
         }
     }).then(() => {

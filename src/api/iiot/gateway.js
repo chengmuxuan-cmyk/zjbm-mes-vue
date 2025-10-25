@@ -131,3 +131,17 @@ export function initializeDeviceModbus(deviceSn) {
     }
   })
 }
+
+// WebSocket网关启用/禁用
+export function changeStatusDeviceWebSocket(deviceId, status) {
+  return request({
+    url: '/iiot/device/changeStatus/' + deviceId + '/' + status,
+    method: 'post',
+    paramsSerializer: params => {
+      return qs.stringify(params, { arrayFormat: 'repeat' })
+    },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}

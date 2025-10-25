@@ -205,6 +205,20 @@ export const dynamicRoutes = [
     ]
   },
   {
+    path: '/iiot/physical-model-websocket',
+    component: Layout,
+    hidden: true,
+    permissions: ['iiot:product:list'],
+    children: [
+      {
+        path: 'index/:productId(\\d+)',
+        component: () => import('@/views/iiot/product/physicalModelWebSocket'),
+        name: 'PhysicalModelWebSocket',
+        meta: { title: 'WebSocket物模型配置', activeMenu: '/iiot/productWebSocket' }
+      }
+    ]
+  },
+  {
     path: '/brain/fundType-data',
     component: Layout,
     hidden: true,

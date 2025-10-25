@@ -72,7 +72,7 @@
             <el-table-column label="产品名称" align="center" prop="productName" :show-overflow-tooltip="true" />
             <el-table-column label="产品编码" align="center" prop="productCode" />
             <el-table-column label="点位编码" align="center" prop="pointId" :show-overflow-tooltip="true" />
-            <el-table-column label="动作描述" align="center" prop="description" />
+            <el-table-column label="动作描述" align="center" prop="description" :show-overflow-tooltip="true" />
             <el-table-column label="目标值" align="center" prop="targetValue" width="100" />
             <el-table-column label="动作执行顺序" align="center" prop="actionOrder" width="120" />
             <el-table-column label="动作状态" align="center" prop="status">
@@ -98,13 +98,13 @@
             </el-table-column>
         </el-table>
 
-        <pagination
-            v-show="total > 0"
-            :total="total"
-            v-model:page="queryParams.pageNum"
-            v-model:limit="queryParams.pageSize"
-            @pagination="getList"
-        />
+<!--        <pagination-->
+<!--            v-show="total > 0"-->
+<!--            :total="total"-->
+<!--            v-model:page="queryParams.pageNum"-->
+<!--            v-model:limit="queryParams.pageSize"-->
+<!--            @pagination="getList"-->
+<!--        />-->
 
         <!-- 批量添加场景联动对话框 -->
         <el-dialog :title="titleAddBatch" v-model="openAddBatch" width="1500px" append-to-body>
@@ -267,8 +267,8 @@ const route = useRoute();
 const data = reactive({
     form: {},
     queryParams: {
-        pageNum: 1,
-        pageSize: 10,
+        // pageNum: 1,
+        // pageSize: 10,
         sceneId: route.params.sceneId,
         productName: undefined,
         productCode: undefined,
@@ -308,7 +308,7 @@ function getProductPointListFunc() {
 function getList() {
     loading.value = true;
     return listSceneAction(queryParams.value).then(response => {
-        sceneActionList.value = response.rows;
+        sceneActionList.value = response.rows.sort((a, b) => a.actionOrder - b.actionOrder);
         total.value = response.total;
         loading.value = false;
     });
@@ -338,7 +338,7 @@ function reset() {
 }
 /** 搜索按钮操作 */
 function handleQuery() {
-    queryParams.value.pageNum = 1;
+    // queryParams.value.pageNum = 1;
     getList();
 }
 /** 重置按钮操作 */
@@ -356,7 +356,8 @@ function handleSelectionChange(selection) {
 }
 
 /** 新增按钮操作 */
-function handleAddBatch() {
+async function handleAddBatch() {
+    await getProductPointListFunc()
     openAddBatch.value = true;
     titleAddBatch.value = "添加场景联动";
 }

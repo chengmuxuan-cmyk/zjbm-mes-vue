@@ -11,7 +11,7 @@ window.__APP_CONFIG__ = {
     VITE_APP_ENV: 'production',
 
     // API 基础路径
-    VITE_APP_BASE_API: 'http://192.168.120.66:9114',
+    VITE_APP_BASE_API: '/dev-api',
 
     // 应用访问路径
     VITE_APP_CONTEXT_PATH: '/',

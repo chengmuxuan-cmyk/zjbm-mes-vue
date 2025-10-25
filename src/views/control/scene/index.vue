@@ -94,13 +94,13 @@
             </el-table-column>
         </el-table>
 
-        <pagination
-            v-show="total > 0"
-            :total="total"
-            v-model:page="queryParams.pageNum"
-            v-model:limit="queryParams.pageSize"
-            @pagination="getList"
-        />
+<!--        <pagination-->
+<!--            v-show="total > 0"-->
+<!--            :total="total"-->
+<!--            v-model:page="queryParams.pageNum"-->
+<!--            v-model:limit="queryParams.pageSize"-->
+<!--            @pagination="getList"-->
+<!--        />-->
 
         <!-- 添加或修改参数配置对话框 -->
         <el-dialog :title="title" v-model="open" width="500px" append-to-body>
@@ -162,8 +162,9 @@ const title = ref("");
 const data = reactive({
     form: {},
     queryParams: {
-        pageNum: 1,
-        pageSize: 10,
+        // pageNum: 1,
+        // pageSize: 10,
+        sort: 'sortOrder',
         sceneCode: undefined,
         name: undefined,
     },
@@ -181,7 +182,7 @@ const { queryParams, form, rules } = toRefs(data);
 function getList() {
     loading.value = true;
     listScene(queryParams.value).then(response => {
-        sceneList.value = response.rows;
+        sceneList.value = response.rows.sort((a, b) => a.sortOrder - b.sortOrder);
         total.value = response.total;
         loading.value = false;
     });
@@ -206,7 +207,7 @@ function reset() {
 }
 /** 搜索按钮操作 */
 function handleQuery() {
-    queryParams.value.pageNum = 1;
+    // queryParams.value.pageNum = 1;
     getList();
 }
 /** 重置按钮操作 */
