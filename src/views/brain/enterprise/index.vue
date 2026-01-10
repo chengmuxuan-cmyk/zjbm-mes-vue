@@ -118,8 +118,8 @@
         />
 
         <!-- 添加或修改企业对话框 -->
-        <el-dialog :title="title" v-model="open" width="800px" append-to-body>
-            <el-form ref="enterpriseRef" :model="form" :rules="rules" label-width="80px">
+        <el-dialog :title="title" v-model="open" width="1000px" append-to-body>
+            <el-form ref="enterpriseRef" :model="form" :rules="rules" label-width="110px">
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="类别" prop="type">
@@ -198,6 +198,66 @@
                             <ProductImageUpload v-model="form.logo"/>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="是否银发经济" prop="silverEconomy">
+                            <el-radio-group v-model="form.silverEconomy">
+                                <el-radio
+                                    v-for="dict in brain_enterprise_silver_economy"
+                                    :key="dict.value"
+                                    :label="dict.value"
+                                >{{ dict.label }}
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="企业地点" prop="location">
+                            <el-select v-model="form.location" placeholder="请选择">
+                                <el-option
+                                    v-for="dict in brain_enterprise_location"
+                                    :key="dict.value"
+                                    :label="dict.label"
+                                    :value="dict.value"
+                                ></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="是否生命健康类" prop="lifeHealth">
+                            <el-radio-group v-model="form.lifeHealth">
+                                <el-radio
+                                    v-for="dict in brain_enterprise_life_health"
+                                    :key="dict.value"
+                                    :label="dict.value"
+                                >{{ dict.label }}
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="企业类型" prop="enterpriseCategory">
+                            <el-select v-model="form.enterpriseCategory" placeholder="请选择">
+                                <el-option
+                                    v-for="dict in brain_enterprise_category"
+                                    :key="dict.value"
+                                    :label="dict.label"
+                                    :value="dict.value"
+                                ></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目进展" prop="projectProgress">
+                            <el-select v-model="form.projectProgress" placeholder="请选择">
+                                <el-option
+                                    v-for="dict in brain_enterprise_progress"
+                                    :key="dict.value"
+                                    :label="dict.label"
+                                    :value="dict.value"
+                                ></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
             <template #footer>
@@ -228,7 +288,21 @@ const {
     brain_enterprise_type,
     brain_enterprise_development,
     brain_enterprise_important,
-} = proxy.useDict("brain_enterprise_type", "brain_enterprise_development", "brain_enterprise_important");
+    brain_enterprise_silver_economy,
+    brain_enterprise_location,
+    brain_enterprise_life_health,
+    brain_enterprise_category,
+    brain_enterprise_progress,
+} = proxy.useDict(
+    "brain_enterprise_type",
+    "brain_enterprise_development",
+    "brain_enterprise_important",
+    "brain_enterprise_silver_economy",
+    "brain_enterprise_location",
+    "brain_enterprise_life_health",
+    "brain_enterprise_category",
+    "brain_enterprise_progress",
+);
 
 const enterpriseList = ref([]);
 const open = ref(false);
@@ -251,9 +325,9 @@ const data = reactive({
         development: undefined,
     },
     rules: {
-        type: [{required: true, message: "类别不能为空", trigger: "change"}],
+        // type: [{required: true, message: "类别不能为空", trigger: "change"}],
         name: [{required: true, message: "单位名称不能为空", trigger: "blur"}],
-        logo: [{required: true, message: "logo不能为空", trigger: "change"}],
+        // logo: [{required: true, message: "logo不能为空", trigger: "change"}],
         contactInfo: [
             {
                 validator: (rule, value, callback) => {
@@ -322,6 +396,11 @@ function reset() {
         contactInfo: undefined,
         dock: undefined,
         important: '0',
+        silverEconomy: '0',
+        location: undefined,
+        lifeHealth: '0',
+        enterpriseCategory: undefined,
+        projectProgress: undefined,
     };
     proxy.resetForm("enterpriseRef");
 }
